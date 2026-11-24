@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Glow | نموذج الطلب عبر واتساب</title>
+    <!-- تحميل Tailwind CSS للتنسيق المتجاوب -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- تحميل خط Tajawal و Playfair Display من Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        beige: {
+                            bg: '#F4EFE6',       /* خلفية بيج دافئة ناعمة */
+                            card: '#FAF7F2',     /* خلفية البطاقة بيج فاتح */
+                            input: '#FFFFFF',    /* خلفية حقول الإدخال */
+                            border: '#DFD5C5',   /* لون الحدود البيج الداكن قليلاً */
+                            accent: '#C5B091',   /* لون لمسات جمالية ذهبي/بيج */
+                            hover: '#EAE0D0'     /* لون التمرير */
+                        },
+                        ink: {
+                            DEFAULT: '#121212',  /* أسود فاحم للنصوص الرئيسية */
+                            muted: '#3A3A3A'     /* أسود ناعم للنصوص الفرعية */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                        brand: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-beige-bg text-ink font-sans antialiased min-h-screen py-6 px-4 sm:py-10 selection:bg-beige-accent selection:text-ink">
+
+    <!-- الحاوية الرئيسية للنموذج -->
+    <main class="max-w-xl mx-auto">
+        
+        <!-- بطاقة المتجر ونموذج الطلب -->
+        <div class="bg-beige-card border border-beige-border rounded-3xl shadow-xl overflow-hidden">
+            
+            <!-- رأس الصفحة (Header) -->
+            <header class="bg-[#EDE4D3] border-b border-beige-border px-6 py-8 text-center relative">
+                <!-- أيقونة تجميلية بسيطة -->
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-beige-card border border-beige-border mb-3 shadow-sm">
+                    <svg class="w-6 h-6 text-ink" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+                    </svg>
+                </div>
+                
+                <h1 class="font-brand text-3xl sm:text-4xl font-bold tracking-wide text-ink" dir="ltr">
+                    Your Glow
+                </h1>
+                <p class="mt-2 text-sm sm:text-base font-medium text-ink-muted">
+                    منتجات العناية بالبشرة الفاخرة • استمارة الطلب السريع
+                </p>
+            </header>
+
+            <!-- محتوى النموذج -->
+            <form id="orderForm" class="p-6 sm:p-8 space-y-8" novalidate>
+                
+                <!-- صندوق التنبيهات المخصص (بديل alert) -->
+                <div id="alertBox" class="hidden rounded-2xl p-4 text-sm font-bold border transition-all duration-300" role="alert">
+                    <div class="flex items-center gap-3">
+                        <span id="alertIcon" class="text-lg">⚠️</span>
+                        <span id="alertMessage"></span>
+                    </div>
+                </div>
+
+                <!-- القسم الأول: اختيار المنتجات -->
+                <section aria-labelledby="products-heading">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 id="products-heading" class="text-lg sm:text-xl font-extrabold text-ink flex items-center gap-2">
+                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-ink text-beige-card text-sm">1</span>
+                            اختاري منتجاتكِ المفضلة
+                        </h2>
+                        <span class="text-xs font-bold bg-[#EDE4D3] text-ink px-3 py-1 rounded-full border border-beige-border">
+                            يمكنكِ اختيار أكثر من منتج
+                        </span>
+                    </div>
+
+                    <!-- قائمة المنتجات -->
+                    <div id="productsList" class="space-y-3">
+                        <!-- سيتم توليد المنتجات ديناميكياً عبر JavaScript لضمان دقة الحساب -->
+                    </div>
+                </section>
+
+                <!-- بطاقة الحاسبة (المجموع والكمية الإجمالية) -->
+                <section class="bg-[#EDE4D3] border-2 border-beige-accent rounded-2xl p-5 shadow-inner">
+                    <div class="flex items-center justify-between pb-3 border-b border-beige-border">
+                        <span class="text-sm sm:text-base font-bold text-ink">إجمالي عدد القطع (الكمية):</span>
+                        <span id="summaryQuantity" class="text-base sm:text-lg font-extrabold text-ink bg-beige-card px-3.5 py-1 rounded-xl border border-beige-border">
+                            0 قطعة
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between pt-3">
+                        <span class="text-base sm:text-lg font-extrabold text-ink">المجموع الكلي للطلب:</span>
+                        <div class="text-left">
+                            <span id="totalPrice" class="text-2xl sm:text-3xl font-extrabold text-ink">0</span>
+                            <span class="text-base font-extrabold text-ink mr-1">درهم</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- القسم الثاني: المعلومات الشخصية -->
+                <section aria-labelledby="personal-info-heading" class="space-y-4">
+                    <h2 id="personal-info-heading" class="text-lg sm:text-xl font-extrabold text-ink flex items-center gap-2 mb-4">
+                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-ink text-beige-card text-sm">2</span>
+                        المعلومات الشخصية والتوصيل
+                    </h2>
+
+                    <!-- الاسم الكامل -->
+                    <div>
+                        <label for="fullName" class="block text-sm font-bold text-ink mb-1.5">
+                            الاسم الكامل <span class="text-red-700">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            name="fullName" 
+                            placeholder="أدخلي اسمكِ الكامل هنا..." 
+                            required
+                            class="w-full rounded-xl bg-beige-input border border-beige-border px-4 py-3 text-ink placeholder-gray-500 font-medium focus:outline-none focus:border-ink focus:ring-2 focus:ring-beige-accent transition"
+                        >
+                    </div>
+
+                    <!-- رقم الهاتف -->
+                    <div>
+                        <label for="phoneNumber" class="block text-sm font-bold text-ink mb-1.5">
+                            رقم الهاتف <span class="text-red-700">*</span>
+                        </label>
+                        <input 
+                            type="tel" 
+                            id="phoneNumber" 
+                            name="phoneNumber" 
+                            placeholder="مثال: 0612345678" 
+                            dir="ltr"
+                            required
+                            class="w-full rounded-xl bg-beige-input border border-beige-border px-4 py-3 text-ink text-right placeholder-gray-500 font-medium focus:outline-none focus:border-ink focus:ring-2 focus:ring-beige-accent transition"
+                        >
+                    </div>
+
+                    <!-- المدينة والكمية في صف متجاوب -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- المدينة -->
+                        <div>
+                            <label for="city" class="block text-sm font-bold text-ink mb-1.5">
+                                المدينة <span class="text-red-700">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="city" 
+                                name="city" 
+                                placeholder="الدار البيضاء، الرباط، طنجة..." 
+                                required
+                                class="w-full rounded-xl bg-beige-input border border-beige-border px-4 py-3 text-ink placeholder-gray-500 font-medium focus:outline-none focus:border-ink focus:ring-2 focus:ring-beige-accent transition"
+                            >
+                        </div>
+
+                        <!-- حقل الكمية الإجمالية (مرتبط تلقائياً بالمنتجات المختارة) -->
+                        <div>
+                            <label for="totalQuantityInput" class="block text-sm font-bold text-ink mb-1.5">
+                                الكمية الإجمالية
+                            </label>
+                            <input 
+                                type="text" 
+                                id="totalQuantityInput" 
+                                name="totalQuantityInput" 
+                                value="0" 
+                                readonly
+                                class="w-full rounded-xl bg-[#EDE4D3] border border-beige-border px-4 py-3 text-ink font-extrabold cursor-not-allowed focus:outline-none"
+                                title="يتم تحديث الكمية تلقائياً عند اختيار المنتجات"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- العنوان الكامل -->
+                    <div>
+                        <label for="fullAddress" class="block text-sm font-bold text-ink mb-1.5">
+                            العنوان الكامل <span class="text-red-700">*</span>
+                        </label>
+                        <textarea 
+                            id="fullAddress" 
+                            name="fullAddress" 
+                            rows="3" 
+                            placeholder="الحي، اسم الشارع، رقم المنزل أو الإقامة..." 
+                            required
+                            class="w-full rounded-xl bg-beige-input border border-beige-border px-4 py-3 text-ink placeholder-gray-500 font-medium focus:outline-none focus:border-ink focus:ring-2 focus:ring-beige-accent transition resize-none"
+                        ></textarea>
+                    </div>
+                </section>
+
+                <!-- زر إرسال الطلب عبر واتساب -->
+                <div class="pt-2">
+                    <button 
+                        type="submit" 
+                        class="w-full bg-ink hover:bg-[#2A2A2A] active:scale-[0.99] text-[#FAF7F2] font-extrabold text-lg py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-3 cursor-pointer"
+                    >
+                        <!-- أيقونة واتساب SVG -->
+                        <svg class="w-6 h-6 fill-current text-[#25D366]" viewBox="0 0 24 24">
+                            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
+                        </svg>
+                        <span>تأكيد وإرسال الطلب عبر واتساب</span>
+                    </button>
+                </div>
+
+                <!-- جملة الشكر الجميلة في نهاية الطلب -->
+                <footer class="pt-4 border-t border-beige-border text-center">
+                    <p class="text-sm sm:text-base font-bold text-ink leading-relaxed">
+                        ✨ شكراً من القلب لاختياركِ <span class="font-brand font-bold">Your Glow</span> ✨
+                        <br>
+                        <span class="text-xs sm:text-sm font-medium text-ink-muted">
+                            سعداء جداً بثقتكِ بنا، ونتمنى لكِ بشرة مشرقة تفيض بالجمال والنضارة دائماً! 🤍
+                        </span>
+                    </p>
+                </footer>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- منطق البرمجة التفاعلي (JavaScript) -->
+    <script>
+        // 1. بيانات المنتجات والأسعار الخاصة بمتجر Your Glow
+        const PRODUCTS = [
+            { id: 'pack_glow', name: 'Pack glow', subtitle: 'المجموعة المتكاملة لإشراقة فورية', price: 350, quantity: 0, badge: 'الأكثر طلباً' },
+            { id: 'serum_glowing', name: 'Sirum glowing', subtitle: 'سيروم النضارة وتوحيد لون البشرة', price: 120, quantity: 0 },
+            { id: 'cream_hydratante', name: 'Cream hydratante', subtitle: 'كريم الترطيب العميق والنعومة', price: 120, quantity: 0 },
+            { id: 'cream_solaire', name: 'Cream solaire', subtitle: 'واقي الشمس لحماية فائقة طوال اليوم', price: 150, quantity: 0 },
+            { id: 'gel_nettoyant', name: 'Gel nettoyant', subtitle: 'غسول منظف لطيف ومنقي للمسام', price: 120, quantity: 0 },
+            { id: 'serum_anti_tache', name: 'Sirum anti tache', subtitle: 'سيروم فعال لعلاج التصبغات والبقع', price: 120, quantity: 0 }
+        ];
+
+        // رقم الواتساب الخاص بالمتجر
+        const WHATSAPP_NUMBER = '212722082326';
+
+        // عناصر واجهة المستخدم (DOM Elements)
+        const productsListEl = document.getElementById('productsList');
+        const totalPriceEl = document.getElementById('totalPrice');
+        const summaryQuantityEl = document.getElementById('summaryQuantity');
+        const totalQuantityInputEl = document.getElementById('totalQuantityInput');
+        const orderFormEl = document.getElementById('orderForm');
+        const alertBoxEl = document.getElementById('alertBox');
+        const alertMessageEl = document.getElementById('alertMessage');
+        const alertIconEl = document.getElementById('alertIcon');
+
+        /**
+         * دالة عرض قائمة المنتجات في الصفحة وتحديث حالتها
+         */
+        function renderProducts() {
+            productsListEl.innerHTML = '';
+
+            PRODUCTS.forEach((product, index) => {
+                const isSelected = product.quantity > 0;
+
+                const card = document.createElement('div');
+                card.className = `rounded-2xl border p-4 transition-all duration-200 flex items-center justify-between gap-3 ${
+                    isSelected 
+                        ? 'bg-[#EDE4D3] border-ink shadow-sm' 
+                        : 'bg-beige-input border-beige-border hover:bg-beige-hover/50'
+                }`;
+
+                card.innerHTML = `
+                    <!-- الجزء الأيمن: زر الاختيار واسم المنتج -->
+                    <div class="flex items-start sm:items-center gap-3 flex-1 cursor-pointer select-none" onclick="toggleProduct(${index})">
+                        <div class="mt-0.5 sm:mt-0 flex items-center justify-center w-6 h-6 rounded-lg border-2 transition-colors ${
+                            isSelected ? 'bg-ink border-ink text-beige-card' : 'border-beige-accent bg-beige-card'
+                        }">
+                            ${isSelected ? `
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="flex-1">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="font-extrabold text-base sm:text-lg text-ink" dir="ltr">${product.name}</span>
+                                ${product.badge ? `<span class="text-[11px] font-bold bg-ink text-beige-card px-2 py-0.5 rounded-full">${product.badge}</span>` : ''}
+                            </div>
+                            <p class="text-xs text-ink-muted mt-0.5">${product.subtitle}</p>
+                            <p class="text-sm font-extrabold text-ink mt-1">${product.price} درهم</p>
+                        </div>
+                    </div>
+
+                    <!-- الجزء الأيسر: أزرار التحكم بالكمية (+ / -) -->
+                    <div class="flex items-center gap-2 bg-beige-card border border-beige-border rounded-xl p-1 shadow-xs">
+                        <button 
+                            type="button" 
+                            aria-label="تقليل الكمية"
+                            onclick="updateQuantity(${index}, -1)"
+                            class="w-8 h-8 rounded-lg flex items-center justify-center font-extrabold text-lg text-ink hover:bg-beige-hover active:scale-95 transition cursor-pointer ${product.quantity === 0 ? 'opacity-40 cursor-not-allowed' : ''}"
+                            ${product.quantity === 0 ? 'disabled' : ''}
+                        >
+                            −
+                        </button>
+                        <span class="w-6 text-center font-extrabold text-base text-ink select-none">
+                            ${product.quantity}
+                        </span>
+                        <button 
+                            type="button" 
+                            aria-label="زيادة الكمية"
+                            onclick="updateQuantity(${index}, 1)"
+                            class="w-8 h-8 rounded-lg bg-ink text-beige-card flex items-center justify-center font-extrabold text-lg hover:bg-[#2A2A2A] active:scale-95 transition cursor-pointer"
+                        >
+                            +
+                        </button>
+                    </div>
+                `;
+
+                productsListEl.appendChild(card);
+            });
+
+            updateTotals();
+        }
+
+        /**
+         * تبديل اختيار المنتج عند الضغط على اسمه أو مربعه
+         */
+        function toggleProduct(index) {
+            if (PRODUCTS[index].quantity === 0) {
+                PRODUCTS[index].quantity = 1;
+            } else {
+                PRODUCTS[index].quantity = 0;
+            }
+            hideAlert();
+            renderProducts();
+        }
+
+        /**
+         * تحديث كمية منتج معين بالزيادة أو النقصان
+         */
+        function updateQuantity(index, delta) {
+            const newQty = PRODUCTS[index].quantity + delta;
+            if (newQty >= 0 && newQty <= 99) {
+                PRODUCTS[index].quantity = newQty;
+                hideAlert();
+                renderProducts();
+            }
+        }
+
+        /**
+         * حساب وتحديث المجموع الإجمالي والكمية الكلية في الحاسبة
+         */
+        function updateTotals() {
+            let totalAmount = 0;
+            let totalItems = 0;
+
+            PRODUCTS.forEach(product => {
+                totalAmount += product.price * product.quantity;
+                totalItems += product.quantity;
+            });
+
+            totalPriceEl.textContent = totalAmount;
+            summaryQuantityEl.textContent = `${totalItems} ${totalItems === 1 || totalItems === 2 || totalItems > 10 ? 'قطعة' : 'قطع'}`;
+            totalQuantityInputEl.value = totalItems > 0 ? `${totalItems} قطعة` : '0';
+        }
+
+        /**
+         * إظهار رسالة تنبيه أنيقة داخل النموذج
+         */
+        function showAlert(message, type = 'error') {
+            alertMessageEl.textContent = message;
+            alertBoxEl.classList.remove('hidden', 'bg-red-100', 'border-red-400', 'text-red-900', 'bg-green-100', 'border-green-500', 'text-green-900');
+            
+            if (type === 'error') {
+                alertIconEl.textContent = '⚠️';
+                alertBoxEl.classList.add('bg-red-100', 'border-red-400', 'text-red-900');
+            } else {
+                alertIconEl.textContent = '✅';
+                alertBoxEl.classList.add('bg-green-100', 'border-green-500', 'text-green-900');
+            }
+
+            alertBoxEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        /**
+         * إخفاء رسالة التنبيه
+         */
+        function hideAlert() {
+            alertBoxEl.classList.add('hidden');
+        }
+
+        /**
+         * معالجة إرسال النموذج وتجهيز رسالة واتساب
+         */
+        orderFormEl.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // 1. التحقق من اختيار منتج واحد على الأقل
+            const selectedProducts = PRODUCTS.filter(p => p.quantity > 0);
+            if (selectedProducts.length === 0) {
+                showAlert('يرجى اختيار منتج واحد على الأقل لإتمام الطلب.');
+                return;
+            }
+
+            // 2. جلب والتحقق من المعلومات الشخصية
+            const fullName = document.getElementById('fullName').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const fullAddress = document.getElementById('fullAddress').value.trim();
+
+            if (!fullName) {
+                showAlert('يرجى إدخال الاسم الكامل.');
+                document.getElementById('fullName').focus();
+                return;
+            }
+            if (!phoneNumber) {
+                showAlert('يرجى إدخال رقم الهاتف.');
+                document.getElementById('phoneNumber').focus();
+                return;
+            }
+            if (!city) {
+                showAlert('يرجى إدخال المدينة.');
+                document.getElementById('city').focus();
+                return;
+            }
+            if (!fullAddress) {
+                showAlert('يرجى إدخال العنوان الكامل للتوصيل.');
+                document.getElementById('fullAddress').focus();
+                return;
+            }
+
+            // 3. حساب المجاميع النهائية
+            let totalAmount = 0;
+            let totalQuantity = 0;
+            let productsText = '';
+
+            selectedProducts.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                totalAmount += subtotal;
+                totalQuantity += item.quantity;
+                productsText += `▪️ *${item.name}* (الكمية: ${item.quantity}) ⬅️ ${subtotal} درهم\n`;
+            });
+
+            // 4. صياغة رسالة الواتساب بشكل منسق وجميل مع جملة الشكر في الآخر
+            const whatsappMessage = 
+`✨ *طلب جديد من متجر Your Glow* ✨
+━━━━━━━━━━━━━━━━━━━━
+🛍️ *المنتجات المختارة:*
+${productsText}
+📦 *الكمية الإجمالية:* ${totalQuantity} قطعة
+💰 *المجموع الكلي:* *${totalAmount} درهم*
+━━━━━━━━━━━━━━━━━━━━
+👤 *معلومات الزبونة:*
+• *الاسم الكامل:* ${fullName}
+• *رقم الهاتف:* ${phoneNumber}
+• *المدينة:* ${city}
+• *العنوان الكامل:* ${fullAddress}
+━━━━━━━━━━━━━━━━━━━━
+🌸 *شكراً لثقتكِ في Your Glow! نتمنى لكِ تجربة رائعة وبشرة تشع بالجمال والنضارة دائماً.* 🤍✨`;
+
+            // 5. فتح رابط واتساب في نافذة جديدة
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+
+            showAlert('تم تجهيز طلبكِ بنجاح! جاري تحويلكِ إلى واتساب لإرسال الطلب...', 'success');
+            
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+            }, 400);
+        });
+
+        // تشغيل العرض الأولي للمنتجات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', renderProducts);
+    </script>
+</body>
+</html>
